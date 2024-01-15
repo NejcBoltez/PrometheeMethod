@@ -11,7 +11,7 @@ def welcome():
     criterions = []
     criterionWeight = []
     generateTable = False
-
+    criterionImportance=[]
     values=[[]]
     print("VALUES: " + str(values))
     print("VALUES: " + str(len(values)))
@@ -34,11 +34,17 @@ def welcome():
             criterions[cr] = request.args.getlist("criterion")[cr]
         else:
             criterions.append(request.args.getlist("criterion")[cr])
+
+    for ci in range (len(request.args.getlist("importance"))):
+        if (ci < len(criterionImportance)):
+            criterionImportance[ci] = request.args.getlist("importance")[ci]
+        else:
+            criterionImportance.append(request.args.getlist("importance")[ci])
             
     values=[[0 for x in range(len(criterions))] for y in range(len(alternatives))] 
         
         
-    if (request.args.get('generateTable') != None):
+    if (request.args.get('generateTable') != None  and len(alternatives) > 0 and len(criterions) > 0):
         generateTable = True
         
     if ('row00' in str(request.args)):
@@ -56,8 +62,9 @@ def welcome():
             else:
                 values.append(row)
     finalValues = 0
-    if (request.args.get('startCalculation') != None):
-        PrometheeCalc = Promethee(alternatives, criterionWeight, criterions, ["Beneficial", "Non-Beneficial", "Beneficial"],values)
+    print(request.args.get('startCalculation') != None and len(alternatives) > 0 and len(criterions) > 0)
+    if (request.args.get('startCalculation') != None and len(alternatives) > 0 and len(criterions) > 0):
+        PrometheeCalc = Promethee(alternatives, criterionWeight, criterions, criterionImportance, values)
         finalValues = PrometheeCalc.recommendations
     if request.method == 'GET':
         return render_template('base.html', 
