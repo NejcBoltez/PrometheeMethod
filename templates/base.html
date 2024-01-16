@@ -134,7 +134,7 @@
             var countRows = table.rows.length - 1;
             row.id = "alternativesRow" + table.rows.length
             cell1.innerHTML = 'Alternatives ' + countRows;
-            cell2.innerHTML = '<input name="alternative" type="text"/>';
+            cell2.innerHTML = '<input mandatory name="alternative" type="text"/>';
             cell3.innerHTML = '<input id="alternativesRow-'+table.rows.length+'" onclick="removeRow(event)" name="alternativeRemove" type="button" value="Remove"/>';
             console.log("TEST")
 
@@ -147,9 +147,9 @@
             var cell4 = row.insertCell(-1);
             var countRows = table.rows.length - 1;
             row.id = "criterionsRow" + table.rows.length
-            cell1.innerHTML = 'Criteria ' + countRows;
-            cell2.innerHTML = '<input name="criterion" type="text"/>';
-            cell3.innerHTML = 'Weight: <input mandatory style="width:40px" name="criterionWeight" value="{{criterionWeight[x]}}" type="text" type="number" max="1" step="any"/><select name="importance" id="importance"><option value="Cost">Cost</option><option value="Beneficial">Beneficial</option></select>';
+            cell1.innerHTML = '<p style="font-size: 12px;">Criterion ' + countRows + '</p>';
+            cell2.innerHTML = '<input mandatory name="criterion" type="text"/>';
+            cell3.innerHTML = 'Weight: <input mandatory style="width:40px" name="criterionWeight" value="{{criterionWeight[x]}}" type="number" max="1" step="any"/><select name="importance" id="importance"><option value="Cost">Cost</option><option value="Beneficial">Beneficial</option></select>';
             cell4.innerHTML = '<input id="criterionsRow-'+table.rows.length+'" onclick="removeRow(event)" name="criterionRemove" type="button" value="Remove"/>';
         }
         function removeRow(event) {
