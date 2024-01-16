@@ -121,13 +121,13 @@ class Promethee:
         print("COMPARISON MATRIX: " + str(self.comparisonMatrix))
     def enteringFlow(self):
         self.enteringFlowArray = []
-        for x in range(len(self.criterias)):
-            criteriaValues = []
+        for x in range(len(self.alternatives)):
+            alternativesValues = []
             for i in range(len(self.comparisonMatrix)):
-                criteriaValues.append(self.comparisonMatrix[i][x])
-            print(criteriaValues)
-            print(sum(criteriaValues)/3)
-            self.enteringFlowArray.append(sum(criteriaValues)/3)
+                alternativesValues.append(self.comparisonMatrix[i][x])
+            print(alternativesValues)
+            print(sum(alternativesValues)/3)
+            self.enteringFlowArray.append(sum(alternativesValues)/3)
         print(self.enteringFlowArray)
     def leavingFlow(self):
         self.leavingFlowArray = []
