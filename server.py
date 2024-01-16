@@ -1,8 +1,8 @@
-from flask import Flask, request,render_template
+from flask import Flask, request, render_template, flash
 from promethee import Promethee
 
 app = Flask(__name__)
-
+app.secret_key = '_5#y2L"F4Q8z\n\xec]'
 
 @app.route('/', methods=['GET'])
 def welcome():
@@ -13,6 +13,7 @@ def welcome():
     generateTable = False
     criterionImportance=[]
     values=[[]]
+    finalValues = 0
     print("VALUES: " + str(values))
     print("VALUES: " + str(len(values)))
     
@@ -25,9 +26,9 @@ def welcome():
             
     for crweight in range (len(request.args.getlist("criterionWeight"))):
         if (crweight < len(criterionWeight)):
-            criterionWeight[crweight] = request.args.getlist("criterionWeight")[crweight]
+            criterionWeight[crweight] = float(request.args.getlist("criterionWeight")[crweight])
         else:
-            criterionWeight.append(request.args.getlist("criterionWeight")[crweight])
+            criterionWeight.append(float(request.args.getlist("criterionWeight")[crweight]))
             
     for cr in range (len(request.args.getlist("criterion"))):
         if (cr < len(criterions)):
@@ -43,7 +44,31 @@ def welcome():
             
     values=[[0 for x in range(len(criterions))] for y in range(len(alternatives))] 
         
-        
+    if (sum(criterionWeight) < 1):
+        flash("Criterions weight are to low")
+        return render_template('base.html', 
+                               alternatives = alternatives, 
+                               criterions = criterions, 
+                               criterionWeight = criterionWeight, 
+                               numberOfCriterions = len(criterions), 
+                               numberOfAlternatives=len(alternatives), 
+                               name=alternatives, 
+                               values= values,
+                               generateTable= False,
+                               finalCalculation = finalValues)
+    if (sum(criterionWeight) > 1):
+        flash("Criterions weight are to high")
+        return render_template('base.html', 
+                               alternatives = alternatives, 
+                               criterions = criterions, 
+                               criterionWeight = criterionWeight, 
+                               numberOfCriterions = len(criterions), 
+                               numberOfAlternatives=len(alternatives), 
+                               name=alternatives, 
+                               values= values,
+                               generateTable= False,
+                               finalCalculation = finalValues)
+
     if (request.args.get('generateTable') != None  and len(alternatives) > 0 and len(criterions) > 0):
         generateTable = True
         
@@ -61,7 +86,7 @@ def welcome():
                 values[alt] = row
             else:
                 values.append(row)
-    finalValues = 0
+    
     print(request.args.get('startCalculation') != None and len(alternatives) > 0 and len(criterions) > 0)
     if (request.args.get('startCalculation') != None and len(alternatives) > 0 and len(criterions) > 0):
         PrometheeCalc = Promethee(alternatives, criterionWeight, criterions, criterionImportance, values)

@@ -41,7 +41,7 @@
             row.id = "alternativesRow" + table.rows.length
             cell1.innerHTML = 'Alternatives ' + countRows;
             cell2.innerHTML = '<input name="alternative" type="text"/>';
-            cell3.innerHTML = '<input id="alternativesRow-'+table.rows.length+'" onclick="remoweRow(event)" name="alternativeRemove" type="button" value="Remove"/>';
+            cell3.innerHTML = '<input id="alternativesRow-'+table.rows.length+'" onclick="removeRow(event)" name="alternativeRemove" type="button" value="Remove"/>';
             console.log("TEST")
 
         } function addNewCriterion() {
@@ -51,14 +51,16 @@
             var cell2 = row.insertCell(-1);
             var cell3 = row.insertCell(-1);
             var cell4 = row.insertCell(-1);
+            var cell5 = row.insertCell(-1);
             var countRows = table.rows.length - 1;
             row.id = "criterionsRow" + table.rows.length
             cell1.innerHTML = 'Criteria ' + countRows;
             cell2.innerHTML = '<input name="criterion" type="text"/>';
-            cell3.innerHTML = 'Weight: <input mandatory  style="width:30px" name="criterionWeight" value="{{criterionWeight[x]}}" type="text"/>';
-            cell4.innerHTML = '<input id="criterionsRow-'+table.rows.length+'" onclick="remoweRow(event)" name="criterionRemove" type="button" value="Remove"/>';
+            cell3.innerHTML = 'Weight: <input mandatory  style="width:30px" name="criterionWeight" value="{{criterionWeight[x]}}" type="text" type="number" max="1" step="any"/>';
+            cell4.innerHTML = '<select name="importance" id="importance"><option value="Cost">Cost</option><option value="Beneficial">Beneficial</option></select>';
+            cell5.innerHTML = '<input id="criterionsRow-'+table.rows.length+'" onclick="removeRow(event)" name="criterionRemove" type="button" value="Remove"/>';
         }
-        function remoweRow(event) {
+        function removeRow(event) {
             rowId=event.target.id.replace('-','')
             console.log(rowId)
             document.getElementById(rowId).remove();
@@ -67,6 +69,12 @@
 </head>
 <body style="align-items:center; text-align: center; justify-content:center; width:100%">
     <h1>PROMETHEE METHOD</h1>
+    {% for message in get_flashed_messages() %}
+    <div class="alert alert-warning">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        {{ message }}
+    </div>
+    {% endfor %}
     <form onSubmit="/">
         <table class="enteringDataTable" style="margin-left: auto;margin-right: auto;">
             <td>
@@ -75,7 +83,7 @@
                         <td>
                             <table id="alternatives">
                                 <tr>
-                                    <td colspan="2">
+                                    <td colspan="3">
                                         ALTERNATIVES:
                                     </td>
                                 </tr>
@@ -88,7 +96,7 @@
                                             <input name="alternative" type="text" value="{{alternatives[x]}}"/>
                                         </td>
                                         <td>
-                                            <input id="alternativesRow-{{x+1}}" onclick="remoweRow(event)" name="alternativeRemove" type="button" value="Remove"/>
+                                            <input id="alternativesRow-{{x+1}}" onclick="removeRow(event)" name="alternativeRemove" type="button" value="Remove"/>
                                         </td>
                                     </tr>
                                 {% endfor %}
@@ -108,7 +116,7 @@
                         <td>
                             <table id="criterions">
                                 <tr>
-                                    <td colspan="2">
+                                    <td colspan="5">
                                         CRITERIONS:
                                     </td>
                                 </tr>
@@ -121,14 +129,14 @@
                                             <input mandatory name="criterion" type="text" value="{{criterions[x]}}"/>
                                         </td>
                                         <td>
-                                            Weight: <input mandatory style="width:30px" name="criterionWeight" value="{{criterionWeight[x]}}" type="number"/>
+                                            Weight: <input mandatory style="width:40px" name="criterionWeight" value="{{criterionWeight[x]}}" type="number" max="1" step="any"/>
                                         </td>
                                         <td><select name="importance" id="importance">
                                             <option value="Cost">Cost</option>
                                             <option value="Beneficial">Beneficial</option>
                                           </select></td>
                                         <td>
-                                            <input name="criterionRemove" id="criterionsRow-{{x+1}}" onclick="remoweRow(event)" type="button" value="Remove"/>
+                                            <input name="criterionRemove" id="criterionsRow-{{x+1}}" onclick="removeRow(event)" type="button" value="Remove"/>
                                         </td>
                                     </tr>
                                 {% endfor %}
@@ -174,5 +182,6 @@
     {% if finalCalculation != 0 %}
         <p>{{ finalCalculation }}</p>
     {% endif %}
+
 </body>
 </html>
