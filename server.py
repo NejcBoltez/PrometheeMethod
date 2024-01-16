@@ -6,7 +6,6 @@ app.secret_key = '_5#y2L"F4Q8z\n\xec]'
 
 @app.route('/', methods=['GET'])
 def welcome():
-    print("TEST: " + str(request.args.get('alternatives')))
     alternatives = []
     criterions = []
     criterionWeight = []
@@ -14,8 +13,6 @@ def welcome():
     criterionImportance=[]
     values=[[]]
     finalValues = 0
-    print("VALUES: " + str(values))
-    print("VALUES: " + str(len(values)))
     
     for arg in range (len(request.args.getlist("alternative"))):
         if (arg < len(alternatives)):
@@ -56,6 +53,7 @@ def welcome():
                                values= values,
                                generateTable= False,
                                finalCalculation = finalValues)
+    
     if (sum(criterionWeight) > 1):
         flash("Criterions weight are to high")
         return render_template('base.html', 
@@ -77,7 +75,6 @@ def welcome():
             row=[0 for x in range(len(criterions))]
             for c in range (len(criterions)):
                 whichRow='row'+str(alt)+str(c)
-                print('row'+str(alt)+str(c))
                 try :
                     row[c] = int(request.args.get(whichRow))
                 except :
@@ -87,10 +84,10 @@ def welcome():
             else:
                 values.append(row)
     
-    print(request.args.get('startCalculation') != None and len(alternatives) > 0 and len(criterions) > 0)
     if (request.args.get('startCalculation') != None and len(alternatives) > 0 and len(criterions) > 0):
         PrometheeCalc = Promethee(alternatives, criterionWeight, criterions, criterionImportance, values)
         finalValues = PrometheeCalc.recommendations
+
     if request.method == 'GET':
         return render_template('base.html', 
                                alternatives = alternatives, 
