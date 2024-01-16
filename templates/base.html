@@ -222,11 +222,10 @@
                                         </td>
                                         <td>
                                             <span style="font-size: 11px;">Weight: </span><input mandatory style="width:40px" name="criterionWeight" value="{{criterionWeight[x]}}" type="number" max="1" step="any"/>
-                                        <br></br>
-                                            <select name="importance" id="importance">
-                                            <option value="Cost">Cost</option>
-                                            <option value="Beneficial">Beneficial</option>
-                                          </select>
+                                                <select name="importance" id="importance">
+                                                <option value="Cost">Cost</option>
+                                                <option value="Beneficial">Beneficial</option>
+                                            </select>
                                         <td>
                                             <input name="criterionRemove" id="criterionsRow-{{x+1}}" onclick="removeRow(event)" type="button" value="Remove"/>
                                         </td>
@@ -248,7 +247,7 @@
     {% if generateTable == True  or values|length > 1%}
         <h1>TABLE FOR ENTERING DATA</h1>
 
-        <table style="margin-left: auto;margin-right: auto;">
+        <table style=" max-width: 80%; margin-left: auto;margin-right: auto;">
             <tr class="header">
                 <td>ALTERNATIVES</td>
                 <td colspan="{{numberOfCriterions + 1}}">CRITERIONS</td>
@@ -268,11 +267,25 @@
                 </tr>
             {% endfor %}
         <table>
-        <input type="submit" value="True"  name="startCalculation"/>
+        <button type="submit" value="True"  name="startCalculation">Calculate</button>
     </form>
     {% endif %}
     {% if finalCalculation != 0 %}
-        <p>{{ finalCalculation }}</p>
+        <table style="max-width: 80%;min-width: 20%; text-align: center; align-items: center;margin-left: auto;
+        margin-right: auto;">
+            
+                <td>Alternative</td>
+                <td>Score</td>
+                <td>Rang</td>
+            
+            {% for final in finalCalculation %}
+                <tr>
+                    {% for f in final %}
+                        <td>{{ f }}</td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </table>
     {% endif %}
 
 </body>
