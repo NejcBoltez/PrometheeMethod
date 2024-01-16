@@ -22,10 +22,16 @@ def welcome():
     
             
     for crweight in range (len(request.args.getlist("criterionWeight"))):
-        if (crweight < len(criterionWeight)):
-            criterionWeight[crweight] = float(request.args.getlist("criterionWeight")[crweight])
-        else:
-            criterionWeight.append(float(request.args.getlist("criterionWeight")[crweight]))
+        try:
+            if (crweight < len(criterionWeight)):
+                criterionWeight[crweight] = float(request.args.getlist("criterionWeight")[crweight])
+            else:
+                criterionWeight.append(float(request.args.getlist("criterionWeight")[crweight]))
+        except Exception as e:
+            if (crweight < len(criterionWeight)):
+                criterionWeight[crweight] = 0.0
+            else:
+                criterionWeight.append(0.0)
             
     for cr in range (len(request.args.getlist("criterion"))):
         if (cr < len(criterions)):
@@ -41,7 +47,7 @@ def welcome():
             
     values=[[0 for x in range(len(criterions))] for y in range(len(alternatives))] 
         
-    if (sum(criterionWeight) < 1):
+    if (0<sum(criterionWeight) < 1):
         flash("Criterions weight are to low")
         return render_template('base.html', 
                                alternatives = alternatives, 
@@ -54,7 +60,7 @@ def welcome():
                                generateTable= False,
                                finalCalculation = finalValues)
     
-    if (sum(criterionWeight) > 1):
+    if (0<sum(criterionWeight) > 1):
         flash("Criterions weight are to high")
         return render_template('base.html', 
                                alternatives = alternatives, 
@@ -67,6 +73,42 @@ def welcome():
                                generateTable= False,
                                finalCalculation = finalValues)
 
+    if (len(criterions) == 0):
+        flash("Please add some criterions ")
+        return render_template('base.html', 
+                               alternatives = alternatives, 
+                               criterions = criterions, 
+                               criterionWeight = criterionWeight, 
+                               numberOfCriterions = len(criterions), 
+                               numberOfAlternatives=len(alternatives), 
+                               name=alternatives, 
+                               values= values,
+                               generateTable= False,
+                               finalCalculation = finalValues)
+    if (len(alternatives) == 0):
+        flash("Please add some alternatives ")
+        return render_template('base.html', 
+                               alternatives = alternatives, 
+                               criterions = criterions, 
+                               criterionWeight = criterionWeight, 
+                               numberOfCriterions = len(criterions), 
+                               numberOfAlternatives=len(alternatives), 
+                               name=alternatives, 
+                               values= values,
+                               generateTable= False,
+                               finalCalculation = finalValues)
+    if (sum(criterionWeight) == 0 and len(alternatives) > 1):
+        flash("Please add some criterions")
+        return render_template('base.html', 
+                               alternatives = alternatives, 
+                               criterions = criterions, 
+                               criterionWeight = criterionWeight, 
+                               numberOfCriterions = len(criterions), 
+                               numberOfAlternatives=len(alternatives), 
+                               name=alternatives, 
+                               values= values,
+                               generateTable= False,
+                               finalCalculation = finalValues)
     if (request.args.get('generateTable') != None  and len(alternatives) > 0 and len(criterions) > 0):
         generateTable = True
         
