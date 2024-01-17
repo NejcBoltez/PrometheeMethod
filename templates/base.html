@@ -39,6 +39,7 @@
     td {
         text-align: center;
         border-bottom: 1px solid #ddd;
+        word-wrap:break-word;
     }
 
     th {
@@ -46,7 +47,7 @@
     }
     td input[type="text"][name="criterion"],
     td select[name="importance"] {
-        width: 80%; /* Adjust the width as needed */
+        width: 80%;
     }
     input[type="text"],
     input[type="number"] {
@@ -75,16 +76,23 @@
     .criterionWeight {
         border: none;
         color:antiquewhite;
-        background-color: green;
+        background-color: #4caf50;
         font-weight: bold;
-        width:30%;
+        width:100%;
+        overflow:auto;
+        resize: none;
+        margin: 0 0;
+        padding: 0 0;
     }
     .criterions {
-        border: none;
         color:antiquewhite;
         background-color: rgb(142, 141, 141);
         font-weight: bold;
-        width:60%;
+        width:100%;
+        overflow:auto;
+        resize: none;
+        margin: 0 0;
+        padding: 0 0;
     }
     .alternatives {
         border: none;
@@ -197,7 +205,7 @@
                     </tr>
                     <tr>
                         <td colspan="2">
-                            <button type="button" onclick="addNewAlternative()">Create row</button>
+                            <button type="button" onclick="addNewAlternative()">Add new alternative</button>
                         </td>
                     </tr>
                 </table>
@@ -236,7 +244,7 @@
                     </tr>   
                     <tr>
                         <td colspan="2">
-                            <button type="button" onclick="addNewCriterion()">Create row</button>
+                            <button type="button" onclick="addNewCriterion()">Add new criterion</button>
                         </td>
                     </tr>
                 </table>
@@ -255,7 +263,7 @@
             <tr>
                 <td></td>
                 {% for x in range(0, numberOfCriterions) %}
-                    <td><input readonly  type="text" class="criterions" value="{{criterions[x]}}"/><input readonly class="criterionWeight" value="{{criterionWeight[x]}}" type="text"/></td>
+                    <td><textarea wrap="hard" class="criterions">{{criterions[x]}}</textarea><textarea  class="criterionWeight">{{criterionWeight[x]}}</textarea></td>
                 {% endfor %}
             </tr>
             {% for a in range(0, numberOfAlternatives) %}
